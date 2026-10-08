@@ -65,6 +65,8 @@ function Index() {
     answerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
+  const info = result.kind === "found" ? COMMANDS[result.cmd] : undefined;
+
   return (
     <div className="min-h-screen bg-background font-sans text-foreground">
       <main className="mx-auto max-w-3xl px-5 pb-16 pt-8 sm:pt-14">
