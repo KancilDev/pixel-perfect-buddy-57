@@ -142,3 +142,23 @@
     color: var(--color-foreground);
   }
 }
+
+/* ShellSimple palette (light textbook) */
+:root {
+  --radius: 0.875rem;
+  --background: oklch(1 0 0); /* #FFFFFF */
+  --foreground: oklch(0.243 0.022 255); /* #1B2430 */
+  --card: oklch(0.979 0.006 250); /* #F5F8FC */
+  --card-foreground: oklch(0.243 0.022 255);
+  --primary: oklch(0.56 0.18 260); /* #2F6FDE */
+  --primary-foreground: oklch(1 0 0);
+  --muted: oklch(0.979 0.006 250);
+  --muted-foreground: oklch(0.5 0.025 255); /* #5B6676 */
+  --border: oklch(0.928 0.01 255); /* #E3E8EF */
+  --input: oklch(0.928 0.01 255);
+  --ring: oklch(0.56 0.18 260);
+}
+@theme inline {
+  --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
