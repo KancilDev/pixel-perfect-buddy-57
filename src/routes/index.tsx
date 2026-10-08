@@ -5,6 +5,7 @@ import filesImg from "@/assets/files.png";
 import diskImg from "@/assets/disk.png";
 import networkImg from "@/assets/network.png";
 import systemImg from "@/assets/system.png";
+import { COMMANDS, COMMAND_GROUPS } from "@/lib/commands";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,35 +28,18 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const COMMANDS: Record<string, string> = {
-  ls: "Lists the files and folders inside the folder you are in.",
-  cd: "Moves you into a different folder, like double-clicking a folder.",
-  pwd: "Shows the full path of the folder you are in right now.",
-  head: "Shows the first 10 lines of a file so you can peek at the start.",
-  tail: "Shows the last 10 lines of a file, handy for reading the newest log entries.",
-  cat: "Prints the whole contents of a file on the screen.",
-  cp: "Makes a copy of a file or folder.",
-  mv: "Moves a file to a new place, or renames it.",
-  df: "Shows how much space is used and free on each of your disks.",
-  du: "Shows how much disk space a file or folder takes up.",
-  lsblk: "Lists the disks and partitions connected to your computer.",
-  ifconfig: "Shows your network connections and their IP addresses.",
-  ping: "Checks if another computer or website can be reached and how fast it replies.",
-  curl: "Downloads or sends data to a web address straight from the terminal.",
-  ssh: "Lets you log in to another computer over the network and control it.",
-  whoami: "Prints the name of the user you are logged in as.",
-  uname: "Shows basic information about your system, like the Linux kernel name and version.",
-  htop: "Shows a live, colourful list of running programs and how much memory and CPU they use.",
-  git: "Tracks changes to your code and lets you share it with others.",
-  sudo: "Runs a command with administrator powers, after asking for your password.",
+const GROUP_IMAGES: Record<string, string> = {
+  files: filesImg,
+  text: filesImg,
+  disk: diskImg,
+  network: networkImg,
+  system: systemImg,
+  packages: systemImg,
+  archives: diskImg,
+  shell: networkImg,
 };
 
-const GROUPS = [
-  { name: "Files", img: filesImg, cmds: ["ls", "cd", "pwd", "head", "tail", "cat", "cp", "mv"] },
-  { name: "Disk", img: diskImg, cmds: ["df", "du", "lsblk"] },
-  { name: "Network", img: networkImg, cmds: ["ifconfig", "ping", "curl", "ssh"] },
-  { name: "System", img: systemImg, cmds: ["whoami", "uname", "htop", "git", "sudo"] },
-];
+const GROUPS = COMMAND_GROUPS.map((g) => ({ ...g, img: GROUP_IMAGES[g.key] }));
 
 type Result = { kind: "empty" } | { kind: "found"; cmd: string } | { kind: "missing" };
 
@@ -80,6 +64,8 @@ function Index() {
     setResult({ kind: "found", cmd });
     answerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
+
+  const info = result.kind === "found" ? COMMANDS[result.cmd] : undefined;
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground">
@@ -134,10 +120,23 @@ function Index() {
               Your answer shows up here: what the command does, in one simple sentence.
             </p>
           )}
-          {result.kind === "found" && (
+          {result.kind === "found" && info && (
             <>
               <p className="font-mono text-2xl font-semibold text-primary">{result.cmd}</p>
-              <p className="mt-2 text-lg">{COMMANDS[result.cmd]}</p>
+              <p className="mt-2 text-lg">{info.description}</p>
+              {info.flags.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Common flags</p>
+                  <ul className="mt-2 space-y-2">
+                    {info.flags.map((f) => (
+                      <li key={f.flag} className="flex flex-wrap items-baseline gap-x-3">
+                        <code className="rounded bg-background px-2 py-0.5 font-mono text-sm font-semibold text-primary">{f.flag}</code>
+                        <span className="text-muted-foreground">{f.meaning}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </>
           )}
           {result.kind === "missing" && (
@@ -147,7 +146,7 @@ function Index() {
 
         <section className="mt-14">
           <p className="text-lg text-muted-foreground">
-            Not sure what to search? Browse by what you want to do: files, disk, network, or system.
+            Not sure what to search? Browse over 150 commands by what you want to do.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {GROUPS.map((g) => (
