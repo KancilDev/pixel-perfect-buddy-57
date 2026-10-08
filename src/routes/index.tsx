@@ -121,7 +121,20 @@ function Index() {
           {result.kind === "found" && (
             <>
               <p className="font-mono text-2xl font-semibold text-primary">{result.cmd}</p>
-              <p className="mt-2 text-lg">{COMMANDS[result.cmd]}</p>
+              <p className="mt-2 text-lg">{COMMANDS[result.cmd].description}</p>
+              {COMMANDS[result.cmd].flags.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Common flags</p>
+                  <ul className="mt-2 space-y-2">
+                    {COMMANDS[result.cmd].flags.map((f) => (
+                      <li key={f.flag} className="flex flex-wrap items-baseline gap-x-3">
+                        <code className="rounded bg-background px-2 py-0.5 font-mono text-sm font-semibold text-primary">{f.flag}</code>
+                        <span className="text-muted-foreground">{f.meaning}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </>
           )}
           {result.kind === "missing" && (
