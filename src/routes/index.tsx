@@ -144,7 +144,7 @@ function Index() {
 
         <section className="mt-14">
           <p className="text-lg text-muted-foreground">
-            Not sure what to search? Browse by what you want to do: files, disk, network, or system.
+            Not sure what to search? Browse over 150 commands by what you want to do.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {GROUPS.map((g) => (
